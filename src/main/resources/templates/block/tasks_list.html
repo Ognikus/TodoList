@@ -1,0 +1,27 @@
+<div class="container">
+    <h2 th:text="'Списки в группе: ' + ${group.name}"></h2>
+    <ul class="list-group mt-4">
+        <th:block th:if="${taskLists.isEmpty()}">
+            <li class="list-group-item text-center text-muted">Списков пока нет. Создайте новый список.</li>
+        </th:block>
+        <th:block th:each="list : ${taskLists}">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="#" class="text-decoration-none"
+                   th:onclick="'loadTasks(' + ${list.id} + ')'"
+                   th:text="${list.name}">
+                    List Name
+                </a>
+                <div>
+                    <a th:href="@{'/lists/' + ${list.id} + '/delete'}" class="btn btn-danger btn-sm">Удалить</a>
+                </div>
+            </li>
+        </th:block>
+
+    </ul>
+    <form th:action="@{'/groups/' + ${group.id} + '/create-list'}" method="post" class="mt-4">
+        <div class="input-group">
+            <input type="text" class="form-control" name="name" placeholder="Название списка" required>
+            <button type="submit" class="btn btn-primary">Создать список</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <style>
+        body {
+            height: 100vh;
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            width: 280px;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar .content {
+            flex: 1; /* Заполняет всё доступное пространство */
+            overflow-y: auto; /* Добавляет прокрутку, если контент превышает высоту */
+        }
+
+        .sidebar .footer {
+            margin-top: auto; /* Смещает блок вниз */
+        }
+
+        .main-content {
+            margin-left: 280px; /* Должно совпадать с шириной sidebar */
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar bg-body-tertiary">
+    <!-- Верхняя часть Sidebar -->
+    <div class="content">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi pe-none me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+            <span class="fs-4">ToDo List</span>
+        </a>
+        <hr>
+        <div>
+            <h2 class="fs-5 text-center">Группы</h2>
+            <ul class="nav flex-column">
+                <th:block th:each="group : ${taskGroups}">
+                    <li class="nav-item">
+                        <button class="btn btn-dark w-100 text-center rounded-pill px-3 text-decoration-none mt-2"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                th:onclick="'loadLists(' + ${group.id} + ')'">
+                            <span th:text="${group.name}">Group Name</span>
+                        </button>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <!-- Кнопка внизу -->
+    <div class="footer mp-1 mb-3">
+        <button class="btn btn-primary btn-sm w-100" onclick="showCreateGroupForm()">Создать группу</button>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div id="main-content">
+        <h1 class="text-center">Добро пожаловать в приложение ToDo List</h1>
+        <p class="text-muted text-center">Выберите группу или создайте новую, чтобы начать работу.</p>
+    </div>
+</div>
+</body>
+<script src="/script.js"></script>
+</html>

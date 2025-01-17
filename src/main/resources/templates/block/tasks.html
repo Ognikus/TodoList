@@ -1,0 +1,38 @@
+<div class="container">
+    <h2 th:text="'Список: ' + ${taskList.name}" class="mb-4"></h2>
+
+    <ul class="list-group">
+        <th:block th:if="${tasks.isEmpty()}">
+            <li class="list-group-item text-center text-muted">Задач пока нет. Добавьте первую задачу!</li>
+        </th:block>
+        <th:block th:each="task : ${tasks}">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span th:classappend="${task.completed} ? 'text-decoration-line-through' : ''"
+                      th:text="${task.title}">
+                    Task Title
+                </span>
+                <div>
+                    <a href="#" class="btn btn-outline-primary btn-sm"
+                       th:onclick="'toggleTask(' + ${task.id} + ',' + ${taskList.id} + ')'">
+                        Выполнить
+                    </a>
+
+                    <a href="#" class="btn btn-danger btn-sm"
+                       th:onclick="'deleteTask(' + ${task.id} + ',' + ${taskList.id} + ')'">
+                        Удалить
+                    </a>
+
+                </div>
+            </li>
+        </th:block>
+    </ul>
+
+    <form th:onsubmit="|event.preventDefault(); createTask(${taskList.id});|" class="mt-4">
+        <div class="input-group">
+            <input type="text" class="form-control" id="taskInput-[[${taskList.id}]]" placeholder="Введите название задачи">
+            <button type="submit" class="btn btn-primary">Добавить задачу</button>
+        </div>
+    </form>
+
+
+</div>
