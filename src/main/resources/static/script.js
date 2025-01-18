@@ -52,7 +52,7 @@ function loadTasks(listId) {
         return;
     }
 
-    fetch(`/lists/${listId}/tasks`) // Делаем запрос к серверу
+    fetch(`/lists/${listId}/tasks`) // Запрос на сервер
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -60,11 +60,11 @@ function loadTasks(listId) {
             return response.text();
         })
         .then(html => {
-            document.getElementById('main-content').innerHTML = html; // Загружаем HTML в main-content
+            document.getElementById('main-content').innerHTML = html; // Обновляем main-content
         })
         .catch(error => {
             console.error('Error loading tasks:', error);
-            alert('Произошла ошибка при загрузке задач. Попробуйте ещё раз.');
+            alert('Ошибка при загрузке задач. Проверьте консоль.');
         });
 }
 

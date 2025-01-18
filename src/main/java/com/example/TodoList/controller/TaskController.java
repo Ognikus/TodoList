@@ -22,8 +22,7 @@ public class TaskController {
         this.taskListService = taskListService;
     }
 
-    // Отображение задач для списка
-    @GetMapping("/{listId}")
+    @GetMapping("/{listId}/tasks")
     public String getTasksByList(@PathVariable Long listId, Model model) {
         TaskList taskList = taskListService.getTaskListById(listId);
         List<Task> tasks = taskService.getTasksByList(taskList);
@@ -31,8 +30,9 @@ public class TaskController {
         model.addAttribute("taskList", taskList);
         model.addAttribute("tasks", tasks);
 
-        return "block/tasks"; // Указываем путь к шаблону tasks.html
+        return "block/tasks"; // Возвращаем HTML-шаблон tasks.html
     }
+
 
     // Создание новой задачи
     @PostMapping

@@ -29,7 +29,7 @@
 
     <form th:onsubmit="|event.preventDefault(); createTask(${taskList.id});|" class="mt-4">
         <div class="input-group">
-            <input type="text" class="form-control" id="taskInput-[[${taskList.id}]]" placeholder="Введите название задачи">
+            <input type="text" class="form-control" th:id="'taskInput-' + ${taskList.id}" placeholder="Введите название задачи">
             <button type="submit" class="btn btn-primary">Добавить задачу</button>
         </div>
     </form>
