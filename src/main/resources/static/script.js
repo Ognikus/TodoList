@@ -94,6 +94,28 @@ function cancelCreateGroup() {
             `;
 }
 
+function deleteGroup(groupId) {
+    if (!confirm('Вы уверены, что хотите удалить эту группу?')) {
+        return;
+    }
+
+    fetch(`/groups/${groupId}/delete`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP! Код: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.documentElement.innerHTML = html; // Перерисовываем всю страницу
+        })
+        .catch(error => {
+            console.error('Ошибка при удалении группы:', error);
+            alert('Произошла ошибка при удалении группы. Попробуйте ещё раз.');
+        });
+}
+
+
 
 function loadTasks(listId) {
     if (!listId) {

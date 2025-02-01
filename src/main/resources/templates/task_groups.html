@@ -56,16 +56,20 @@
             <h2 class="fs-5 text-center">Группы</h2>
             <ul class="nav flex-column">
                 <th:block th:each="group : ${taskGroups}">
-                    <li class="nav-item">
-                        <button class="btn btn-dark w-100 text-center rounded-pill px-3 text-decoration-none mt-2"
+                    <li class="nav-item d-flex justify-content-between align-items-center">
+                        <button class="btn btn-dark w-75 text-center rounded-pill px-3 text-decoration-none mt-2"
                                 type="button"
-                                data-bs-toggle="collapse"
                                 th:onclick="'loadLists(' + ${group.id} + ')'">
                             <span th:text="${group.name}">Group Name</span>
+                        </button>
+                        <button class="btn btn-dark btn-sm rounded-pill mt-2 me-2"
+                                th:onclick="'deleteGroup(' + ${group.id} + ')'">
+                            ❌
                         </button>
                     </li>
                 </th:block>
             </ul>
+
         </div>
     </div>
     <hr>

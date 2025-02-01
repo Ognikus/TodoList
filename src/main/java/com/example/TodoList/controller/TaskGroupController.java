@@ -43,10 +43,17 @@ public class TaskGroupController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteTaskGroup(@PathVariable Long id) {
+    public String deleteTaskGroup(@PathVariable Long id, Model model) {
         taskGroupService.deleteTaskGroup(id);
-        return "redirect:/groups";
+
+        // Получаем обновленный список групп
+        List<TaskGroup> taskGroups = taskGroupService.getAllTaskGroups();
+        model.addAttribute("taskGroups", taskGroups);
+
+        // Возвращаем основной шаблон task_groups.html (вся страница)
+        return "task_groups";
     }
+
 
     @GetMapping("/{groupId}/lists")
     public String getListsByGroup(@PathVariable("groupId") Long groupId, Model model) {
