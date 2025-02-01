@@ -20,6 +20,55 @@ function loadLists(groupId) {
         });
 }
 
+function createList(groupId) {
+    const input = document.querySelector(`#listInput-${groupId}`);
+    if (!input || !input.value.trim()) {
+        alert('Введите название списка.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', input.value.trim());
+    formData.append('groupId', groupId);
+
+    fetch('/lists', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+            input.value = ''; // Очищаем поле ввода
+        })
+        .catch(error => {
+            console.error('Error creating list:', error);
+            alert('Произошла ошибка при добавлении списка. Попробуйте ещё раз.');
+        });
+}
+
+function deleteList(listId, groupId) {
+    fetch(`/lists/${listId}/delete`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error deleting list:', error);
+            alert('Произошла ошибка при удалении списка. Попробуйте ещё раз.');
+        });
+}
+
+
 function showCreateGroupForm() {
     document.getElementById('main-content').innerHTML = `
                 <div class="card">

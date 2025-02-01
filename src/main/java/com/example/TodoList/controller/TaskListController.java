@@ -3,6 +3,7 @@ package com.example.TodoList.controller;
 import com.example.TodoList.models.Task;
 import com.example.TodoList.models.TaskGroup;
 import com.example.TodoList.models.TaskList;
+import com.example.TodoList.services.TaskGroupService;
 import com.example.TodoList.services.TaskListService;
 import com.example.TodoList.services.TaskService;
 import org.springframework.stereotype.Controller;
@@ -18,38 +19,56 @@ public class TaskListController {
     private final TaskListService taskListService;
     private final TaskService taskService;
 
-    public TaskListController(TaskListService taskListService, TaskService taskService) {
+    private final TaskGroupService taskGroupService;
+
+    public TaskListController(TaskListService taskListService, TaskService taskService, TaskGroupService taskGroupService) {
         this.taskListService = taskListService;
         this.taskService = taskService;
+        this.taskGroupService = taskGroupService;
     }
-
-//    // Получение задач списка и отображение блока tasks.html
-//    @GetMapping("/{id}/tasks")
-//    public String getTaskList(@PathVariable Long id, Model model) {
-//        TaskList taskList = taskListService.getTaskListById(id);
-//        List<Task> tasks = taskService.getTasksByList(taskList);
-//
-//        model.addAttribute("taskList", taskList);
-//        model.addAttribute("tasks", tasks);
-//
-//        return "block/tasks"; // Возвращаем блок tasks.html
-//    }
 
     // Создание нового списка в группе
     @PostMapping
-    public String createTaskList(@RequestParam String name, @RequestParam Long groupId) {
-        TaskGroup taskGroup = new TaskGroup();
-        taskGroup.setId(groupId);
+    public String createTaskList(@RequestParam String name, @RequestParam Long groupId, Model model) {
+        TaskGroup taskGroup = taskGroupService.getTaskGroupById(groupId);
+
+        // Создаём новый список
         taskListService.createTaskList(name, taskGroup);
-        return "redirect:/groups/" + groupId + "/lists"; // Перенаправление на группу
+
+        // Получаем обновлённые списки
+        List<TaskList> taskLists = taskListService.getTaskListsByGroup(taskGroup);
+
+        // Добавляем данные в модель
+        model.addAttribute("taskLists", taskLists);
+        model.addAttribute("groupId", groupId);
+        model.addAttribute("group", taskGroup);
+
+        // Возвращаем обновлённый HTML-фрагмент `task_list.html`
+        return "block/tasks_list";
     }
+
 
     // Удаление списка
     @GetMapping("/{id}/delete")
-    public String deleteTaskList(@PathVariable Long id) {
+    public String deleteTaskList(@PathVariable Long id, Model model) {
+        TaskList taskList = taskListService.getTaskListById(id);
+        Long groupId = taskList.getTaskGroup().getId();
+
+        // Удаляем список
         taskListService.deleteTaskList(id);
-        return "redirect:/groups"; // Возвращаемся на страницу группы
+
+        // Получаем обновлённые списки
+        TaskGroup taskGroup = taskGroupService.getTaskGroupById(groupId);
+        List<TaskList> taskLists = taskListService.getTaskListsByGroup(taskGroup);
+
+        // Добавляем данные в модель
+        model.addAttribute("taskLists", taskLists);
+        model.addAttribute("groupId", groupId);
+        model.addAttribute("group", taskGroup);
+
+        return "block/tasks_list";
     }
+
 
     @GetMapping("/{listId}/tasks")
     public String getTasksByList(@PathVariable Long listId, Model model) {

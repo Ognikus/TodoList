@@ -12,15 +12,18 @@
                     List Name
                 </a>
                 <div>
-                    <a th:href="@{'/lists/' + ${list.id} + '/delete'}" class="btn btn-danger btn-sm">Удалить</a>
+                    <a href="#" class="btn btn-danger btn-sm"
+                       th:onclick="'deleteList(' + ${list.id} + ',' + ${group.id} + ');'">
+                        Удалить
+                    </a>
                 </div>
             </li>
         </th:block>
-
     </ul>
-    <form th:action="@{'/groups/' + ${group.id} + '/create-list'}" method="post" class="mt-4">
+
+    <form th:onsubmit="|event.preventDefault(); createList(${group.id});|" class="mt-4">
         <div class="input-group">
-            <input type="text" class="form-control" name="name" placeholder="Название списка" required>
+            <input type="text" class="form-control" th:id="'listInput-' + ${group.id}" placeholder="Введите название списка">
             <button type="submit" class="btn btn-primary">Создать список</button>
         </div>
     </form>
